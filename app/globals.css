@@ -46,6 +46,27 @@ h1 {
   letter-spacing: -1px;
 }
 
+.pot {
+  background: #1a1a1a;
+  border-radius: 12px;
+  padding: 1rem 1.25rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.pot-label {
+  font-size: 0.85rem;
+  color: #888;
+}
+
+.pot-amount {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #22c55e;
+}
+
 .spend-section {
   display: flex;
   flex-direction: column;

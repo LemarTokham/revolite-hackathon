@@ -1,11 +1,21 @@
 "use client";
 
-import { useState } from "react";
-import { triggerSpend, Transaction } from "@/lib/api";
+import { useState, useEffect } from "react";
 import { IN_PERSON_MERCHANTS, ONLINE_MERCHANTS } from "@/lib/merchants";
+
+interface Transaction {
+  id: string;
+  type: "in-person" | "online";
+  amount: number;
+  merchant: string;
+  category: string;
+  timestamp: string;
+  balanceAfter: number;
+}
 
 export default function Home() {
   const [balance, setBalance] = useState(1000.0);
+  const [pot, setPot] = useState(0.0);
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [inPersonAmount, setInPersonAmount] = useState("5.00");
   const [onlineAmount, setOnlineAmount] = useState("25.00");
@@ -13,23 +23,40 @@ export default function Home() {
   const [onlineMerchant, setOnlineMerchant] = useState(0);
   const [loading, setLoading] = useState<"in-person" | "online" | null>(null);
 
+  // Poll server state
+  useEffect(() => {
+    async function sync() {
+      const res = await fetch("/api/pot");
+      const data = await res.json();
+      setBalance(data.balance);
+      setPot(data.potBalance);
+      setTransactions(data.transactions);
+    }
+    sync();
+    const interval = setInterval(sync, 2000);
+    return () => clearInterval(interval);
+  }, []);
+
   async function handleSpend(type: "in-person" | "online") {
     const amount = parseFloat(type === "in-person" ? inPersonAmount : onlineAmount);
     if (isNaN(amount) || amount <= 0 || amount > balance) return;
 
-    const merchant = type === "in-person"
-      ? IN_PERSON_MERCHANTS[inPersonMerchant]
-      : ONLINE_MERCHANTS[onlineMerchant];
+    const merchantIndex = type === "in-person" ? inPersonMerchant : onlineMerchant;
 
     setLoading(type);
 
-    const newBalance = Math.round((balance - amount) * 100) / 100;
-    const result = await triggerSpend(type, amount, merchant, newBalance);
+    const res = await fetch("/api/spend", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ type, amount, merchantIndex }),
+    });
+    const data = await res.json();
 
     setLoading(null);
-    if (result.success) {
-      setBalance(newBalance);
-      setTransactions((prev) => [result.transaction, ...prev]);
+    if (data.success) {
+      setBalance(data.balance);
+      setPot(data.potBalance);
+      setTransactions((prev) => [data.transaction, ...prev]);
     }
   }
 
@@ -39,6 +66,11 @@ export default function Home() {
       <div className="balance">
         <span className="balance-label">Balance</span>
         <span className="balance-amount">£{balance.toFixed(2)}</span>
+      </div>
+
+      <div className="pot">
+        <span className="pot-label">Impulse Tax Pot</span>
+        <span className="pot-amount">£{pot.toFixed(2)}</span>
       </div>
 
       <div className="spend-section">
