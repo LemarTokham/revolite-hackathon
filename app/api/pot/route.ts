@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import state from "@/lib/state";
 
 
-// Called by ur main app during the taxing process to add money to the pot
+// Called by ur main app during the taxing process to add money to the pot (taxing done in main app, this just updates the pot)
 export async function POST(req: NextRequest) {
   const { amount } = await req.json();
 
@@ -24,7 +24,6 @@ export async function POST(req: NextRequest) {
     potBalance: state.potBalance,
   });
 }
-
 
 // reuturn current state
 export async function GET() {

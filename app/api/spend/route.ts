@@ -35,6 +35,7 @@ export async function POST(req: NextRequest) {
 
   // new elem is added to the start of the array
   state.transactions.unshift(transaction);
+  console.log(transaction)
 
   // TODO: have call to actual app to post transaction
 

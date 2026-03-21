@@ -63,14 +63,15 @@ export default function Home() {
   return (
     <div className="container">
       <h1>Revolite</h1>
-      <div className="balance">
-        <span className="balance-label">Balance</span>
-        <span className="balance-amount">£{balance.toFixed(2)}</span>
-      </div>
-
-      <div className="pot">
-        <span className="pot-label">Impulse Tax Pot</span>
-        <span className="pot-amount">£{pot.toFixed(2)}</span>
+      <div className="accounts">
+        <div className="account">
+          <span className="account-label">Current Account</span>
+          <span className="account-amount">£{balance.toFixed(2)}</span>
+        </div>
+        <div className="account savings">
+          <span className="account-label">Savings Account</span>
+          <span className="account-amount savings-amount">£{pot.toFixed(2)}</span>
+        </div>
       </div>
 
       <div className="spend-section">
