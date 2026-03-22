@@ -159,15 +159,17 @@ export default function Home() {
       body: JSON.stringify({ type, amount, merchant: impulseName, impulseZoneId: impulseId || null }),
     });
     const data = await res.json();
+    console.log("Spend response:", { type, overLimit: data.overLimit, success: data.success });
     setLoading(null);
     if (data.success) {
       setBalance(data.balance);
       setPot(data.potBalance);
       if (data.overLimit) {
+        console.log("Over limit! Playing horse sound for type:", type);
         setOverLimit(true);
         if (type === "in-person") {
           const audio = new Audio("/horse.mp3");
-          audio.play().catch(() => {});
+          audio.play().catch((err) => console.log("Audio play failed:", err));
         }
       }
     }
