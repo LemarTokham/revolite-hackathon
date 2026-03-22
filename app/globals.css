@@ -182,6 +182,27 @@ body {
   color: #444;
 }
 
+/* -- Over Limit Banner -- */
+.theme-dark .over-limit-banner {
+  margin: 0 1.25rem 1.25rem;
+  padding: 0.85rem 1rem;
+  background: #2d1215;
+  border-radius: 12px;
+  border: 1px solid #5c2328;
+}
+
+.theme-dark .over-limit-text {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #f87171;
+  margin-bottom: 0.25rem;
+}
+
+.theme-dark .over-limit-sub {
+  font-size: 0.7rem;
+  color: #a66;
+}
+
 .theme-dark .savings-color {
   color: #22c55e;
 }
@@ -539,6 +560,27 @@ body {
 .theme-light .card-sub {
   font-size: 0.65rem;
   color: #999;
+}
+
+/* -- Over Limit Banner -- */
+.theme-light .over-limit-banner {
+  margin: 0 1.25rem 1rem;
+  padding: 0.85rem 1rem;
+  background: #fef2f2;
+  border-radius: 10px;
+  border: 1px solid #fecaca;
+}
+
+.theme-light .over-limit-text {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #dc2626;
+  margin-bottom: 0.25rem;
+}
+
+.theme-light .over-limit-sub {
+  font-size: 0.7rem;
+  color: #b91c1c;
 }
 
 .theme-light .savings-color {

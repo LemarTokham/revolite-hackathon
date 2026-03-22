@@ -45,10 +45,14 @@ export async function GET() {
   }
 
   const user = getUserState(username);
+  const totalSpent = user.transactions.reduce((sum, t) => sum + t.amount, 0);
   return NextResponse.json({
     balance: user.balance,
     potBalance: user.potBalance,
     transactions: user.transactions,
     potTransactions: user.potTransactions || [],
+    impulseLimit: user.impulseLimit || 0,
+    totalSpent,
+    overLimit: user.impulseLimit > 0 && totalSpent >= user.impulseLimit,
   });
 }

@@ -28,6 +28,10 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Insufficient balance" }, { status: 400 });
   }
 
+  // Check if user has exceeded their impulse limit
+  const totalSpent = user.transactions.reduce((sum, t) => sum + t.amount, 0);
+  const overLimit = user.impulseLimit > 0 && totalSpent >= user.impulseLimit;
+
   // Calculate impulse tax
   const taxAmount = user.taxPercentage > 0
     ? Math.round((amount * user.taxPercentage / 100) * 100) / 100
@@ -96,5 +100,6 @@ export async function POST(req: NextRequest) {
     transaction,
     balance: newBalance,
     potBalance: newPot,
+    overLimit,
   });
 }

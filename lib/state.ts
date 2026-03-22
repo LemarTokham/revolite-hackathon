@@ -26,6 +26,7 @@ export interface UserState {
   transactions: Transaction[];
   potTransactions: PotTransaction[];
   taxPercentage: number;
+  impulseLimit: number;
   accessToken: string | null;
   refreshToken: string | null;
   accountNumber: string | null;
@@ -51,6 +52,7 @@ function newUserState(): UserState {
     transactions: [],
     potTransactions: [],
     taxPercentage: 0,
+    impulseLimit: 0,
     accessToken: null,
     refreshToken: null,
     accountNumber: null,

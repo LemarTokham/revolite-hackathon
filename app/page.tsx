@@ -78,6 +78,9 @@ export default function Home() {
   const [inPersonImpulse, setInPersonImpulse] = useState<number | "">("");
   const [onlineImpulse, setOnlineImpulse] = useState<number | "">("");
   const [loading, setLoading] = useState<"in-person" | "online" | null>(null);
+  const [overLimit, setOverLimit] = useState(false);
+  const [impulseLimit, setImpulseLimit] = useState(0);
+  const [totalSpent, setTotalSpent] = useState(0);
 
   useEffect(() => {
     async function init() {
@@ -111,6 +114,9 @@ export default function Home() {
       setPot(data.potBalance);
       setTransactions(data.transactions);
       setPotTransactions(data.potTransactions || []);
+      setOverLimit(data.overLimit || false);
+      setImpulseLimit(data.impulseLimit || 0);
+      setTotalSpent(data.totalSpent || 0);
     }
     sync();
     const interval = setInterval(sync, 2000);
@@ -157,6 +163,13 @@ export default function Home() {
     if (data.success) {
       setBalance(data.balance);
       setPot(data.potBalance);
+      if (data.overLimit) {
+        setOverLimit(true);
+        if (type === "in-person") {
+          const audio = new Audio("/horse.mp3");
+          audio.play().catch(() => {});
+        }
+      }
     }
   }
 
@@ -241,6 +254,17 @@ export default function Home() {
           <span className="card-sub">Impulse tax pot</span>
         </div>
       </div>
+
+      {overLimit && impulseLimit > 0 && (
+        <div className="over-limit-banner">
+          <div className="over-limit-text">
+            You have exceeded your impulse limit of £{impulseLimit.toFixed(2)}
+          </div>
+          <div className="over-limit-sub">
+            £{totalSpent.toFixed(2)} spent — in-person payments will trigger a sound alert
+          </div>
+        </div>
+      )}
 
       {showSavings && (
         <div className="savings-panel">

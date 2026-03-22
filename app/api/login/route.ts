@@ -44,8 +44,9 @@ export async function POST(req: NextRequest) {
         const meData = await meRes.json();
         setUserState(username, {
           taxPercentage: meData.tax_percentage || 0,
+          impulseLimit: meData.impulse_limit || 0,
         });
-        console.log("Tax percentage:", meData.tax_percentage);
+        console.log("Tax percentage:", meData.tax_percentage, "Impulse limit:", meData.impulse_limit);
       }
     } catch {
       console.log("Could not fetch tax percentage");
