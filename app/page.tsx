@@ -2,6 +2,19 @@
 
 import { useState, useEffect } from "react";
 
+const UNLOCK_DATE = new Date("2027-02-16T00:00:00Z");
+
+function getCountdown() {
+  const now = new Date();
+  const diff = UNLOCK_DATE.getTime() - now.getTime();
+  if (diff <= 0) return { days: 0, hours: 0, minutes: 0, seconds: 0 };
+  const days = Math.floor(diff / 86400000);
+  const hours = Math.floor((diff % 86400000) / 3600000);
+  const minutes = Math.floor((diff % 3600000) / 60000);
+  const seconds = Math.floor((diff % 60000) / 1000);
+  return { days, hours, minutes, seconds };
+}
+
 interface Transaction {
   id: string;
   type: "in-person" | "online";
@@ -81,6 +94,13 @@ export default function Home() {
   const [overLimit, setOverLimit] = useState(false);
   const [impulseLimit, setImpulseLimit] = useState(0);
   const [totalSpent, setTotalSpent] = useState(0);
+  const [countdown, setCountdown] = useState(getCountdown());
+
+  useEffect(() => {
+    if (!showSavings) return;
+    const timer = setInterval(() => setCountdown(getCountdown()), 1000);
+    return () => clearInterval(timer);
+  }, [showSavings]);
 
   useEffect(() => {
     async function init() {
@@ -254,7 +274,7 @@ export default function Home() {
         <div className="account-card savings" onClick={() => setShowSavings(!showSavings)}>
           <span className="card-label">Savings</span>
           <span className="card-amount savings-color">£{pot.toFixed(2)}</span>
-          <span className="card-sub">Impulse tax pot</span>
+          <span className="card-sub card-locked">Locked until Feb 2027</span>
         </div>
       </div>
 
@@ -274,6 +294,27 @@ export default function Home() {
           <div className="savings-panel-header">
             <h2>Savings Statements</h2>
             <button className="btn-action" onClick={() => setShowSavings(false)}>Close</button>
+          </div>
+          <div className="countdown">
+            <div className="countdown-label">Unlocks 16 February 2027 (Year of the Horse)</div>
+            <div className="countdown-timer">
+              <div className="countdown-unit">
+                <span className="countdown-num">{countdown.days}</span>
+                <span className="countdown-txt">days</span>
+              </div>
+              <div className="countdown-unit">
+                <span className="countdown-num">{countdown.hours}</span>
+                <span className="countdown-txt">hrs</span>
+              </div>
+              <div className="countdown-unit">
+                <span className="countdown-num">{countdown.minutes}</span>
+                <span className="countdown-txt">min</span>
+              </div>
+              <div className="countdown-unit">
+                <span className="countdown-num">{countdown.seconds}</span>
+                <span className="countdown-txt">sec</span>
+              </div>
+            </div>
           </div>
           {potTransactions.length === 0 ? (
             <p className="empty-state">No savings yet. Tax from impulse spending will appear here.</p>

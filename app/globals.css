@@ -203,6 +203,11 @@ body {
   color: #a66;
 }
 
+.theme-dark .card-locked {
+  color: #f59e0b;
+  font-weight: 500;
+}
+
 .theme-dark .savings-color {
   color: #22c55e;
 }
@@ -234,6 +239,46 @@ body {
 
 .theme-dark .savings-panel li {
   border-top: 1px solid #1f1f1f;
+}
+
+/* -- Countdown Timer -- */
+.theme-dark .countdown {
+  padding: 1rem;
+  text-align: center;
+  border-bottom: 1px solid #1f1f1f;
+}
+
+.theme-dark .countdown-label {
+  font-size: 0.7rem;
+  color: #f59e0b;
+  margin-bottom: 0.75rem;
+  font-weight: 500;
+}
+
+.theme-dark .countdown-timer {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.theme-dark .countdown-unit {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.theme-dark .countdown-num {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #fff;
+  min-width: 40px;
+}
+
+.theme-dark .countdown-txt {
+  font-size: 0.6rem;
+  color: #555;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .theme-dark .empty-state {
@@ -583,6 +628,11 @@ body {
   color: #b91c1c;
 }
 
+.theme-light .card-locked {
+  color: #d97706;
+  font-weight: 500;
+}
+
 .theme-light .savings-color {
   color: #16a34a;
 }
@@ -615,6 +665,46 @@ body {
 
 .theme-light .savings-panel li {
   border-top: 1px solid #f0f0f0;
+}
+
+/* -- Countdown Timer -- */
+.theme-light .countdown {
+  padding: 1rem;
+  text-align: center;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.theme-light .countdown-label {
+  font-size: 0.7rem;
+  color: #d97706;
+  margin-bottom: 0.75rem;
+  font-weight: 500;
+}
+
+.theme-light .countdown-timer {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.theme-light .countdown-unit {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.theme-light .countdown-num {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1a1a1a;
+  min-width: 40px;
+}
+
+.theme-light .countdown-txt {
+  font-size: 0.6rem;
+  color: #999;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .theme-light .empty-state {
