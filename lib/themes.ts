@@ -16,6 +16,7 @@ export interface BankTheme {
   inputBg: string;
   inputBorder: string;
   isDark: boolean;
+  favicon: string;
 }
 
 const themes: Record<string, BankTheme> = {
@@ -36,6 +37,7 @@ const themes: Record<string, BankTheme> = {
     inputBg: "#111111",
     inputBorder: "#2a2a2a",
     isDark: true,
+    favicon: "https://play-lh.googleusercontent.com/bo7Qeq8XZVI4hyXTVyG7Oi3hMiqADqruYeyQWqzzJzNHCYNVLmpAne0XP4_JH2AJ1tE",
   },
   "hay-chsbc": {
     id: "hay-chsbc",
@@ -54,6 +56,7 @@ const themes: Record<string, BankTheme> = {
     inputBg: "#ffffff",
     inputBorder: "#d1d5db",
     isDark: false,
+    favicon: "https://create.hsbc/content/dam/brandhub/brand/ld-history/hexagon_1192x671.jpg",
   },
   "mane-zo": {
     id: "mane-zo",
@@ -72,6 +75,7 @@ const themes: Record<string, BankTheme> = {
     inputBg: "#111111",
     inputBorder: "#2a2a2a",
     isDark: true,
+    favicon: "https://logos-world.net/wp-content/uploads/2021/09/Monzo-Emblem.png",
   },
   "buck-lays": {
     id: "buck-lays",
@@ -90,6 +94,7 @@ const themes: Record<string, BankTheme> = {
     inputBg: "#111111",
     inputBorder: "#2a2a2a",
     isDark: true,
+    favicon: "https://companieslogo.com/img/orig/BCS-745d30bf.png?t=1720244491",
   },
 };
 

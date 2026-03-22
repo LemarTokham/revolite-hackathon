@@ -3,7 +3,10 @@ import { getTheme } from "@/lib/themes";
 
 export async function generateMetadata() {
   const theme = getTheme();
-  return { title: theme.name };
+  return {
+    title: theme.name,
+    icons: { icon: theme.favicon },
+  };
 }
 
 export default function RootLayout({
