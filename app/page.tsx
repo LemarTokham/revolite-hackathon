@@ -151,6 +151,7 @@ export default function Home() {
     const amount = parseFloat(type === "in-person" ? inPersonAmount : onlineAmount);
     if (isNaN(amount) || amount <= 0 || amount > balance) return;
     const impulseId = type === "in-person" ? inPersonImpulse : onlineImpulse;
+    if (!impulseId) return;
     const impulseName = impulses.find((i) => i.id === impulseId)?.name || "Purchase";
     setLoading(type);
     const res = await fetch("/api/spend", {
@@ -263,7 +264,7 @@ export default function Home() {
             You have exceeded your impulse limit of £{impulseLimit.toFixed(2)}
           </div>
           <div className="over-limit-sub">
-            £{totalSpent.toFixed(2)} spent — in-person payments will trigger a sound alert
+            £{totalSpent.toFixed(2)} spent!!!!! In-person payments will trigger a sound alert and YOU'll be SOOO EMBARRAZZED
           </div>
         </div>
       )}
@@ -321,7 +322,7 @@ export default function Home() {
           <button
             className="btn-spend"
             onClick={() => handleSpend("in-person")}
-            disabled={loading !== null}
+            disabled={loading !== null || !inPersonImpulse}
             style={{ background: primary }}
           >
             {loading === "in-person" ? "Processing..." : "Tap to Pay"}
@@ -351,7 +352,7 @@ export default function Home() {
           <button
             className="btn-spend"
             onClick={() => handleSpend("online")}
-            disabled={loading !== null}
+            disabled={loading !== null || !onlineImpulse}
             style={{ background: primary }}
           >
             {loading === "online" ? "Processing..." : "Buy Online"}
