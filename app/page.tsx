@@ -27,6 +27,7 @@ interface BankTheme {
   primaryColor: string;
   accentColor: string;
   savingsColor: string;
+  isDark: boolean;
 }
 
 interface ImpulseZone {
@@ -34,8 +35,29 @@ interface ImpulseZone {
   name: string;
 }
 
+const ICON_COLORS = ["#6366f1", "#ec4899", "#f59e0b", "#10b981", "#8b5cf6", "#ef4444", "#06b6d4", "#f97316"];
+
+function merchantInitial(name: string): string {
+  return name.charAt(0).toUpperCase();
+}
+
+function merchantColor(name: string): string {
+  let hash = 0;
+  for (let i = 0; i < name.length; i++) hash = name.charCodeAt(i) + ((hash << 5) - hash);
+  return ICON_COLORS[Math.abs(hash) % ICON_COLORS.length];
+}
+
+function formatTime(ts: string): string {
+  const d = new Date(ts);
+  const now = new Date();
+  const diff = now.getTime() - d.getTime();
+  if (diff < 60000) return "Just now";
+  if (diff < 3600000) return `${Math.floor(diff / 60000)}m ago`;
+  if (diff < 86400000) return `${Math.floor(diff / 3600000)}h ago`;
+  return d.toLocaleDateString("en-GB", { day: "numeric", month: "short" });
+}
+
 export default function Home() {
-  // Auth
   const [loggedIn, setLoggedIn] = useState(false);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -44,7 +66,6 @@ export default function Home() {
   const [checkingAuth, setCheckingAuth] = useState(true);
   const [theme, setTheme] = useState<BankTheme | null>(null);
 
-  // Bank state
   const [balance, setBalance] = useState(1000.0);
   const [pot, setPot] = useState(0.0);
   const [transactions, setTransactions] = useState<Transaction[]>([]);
@@ -52,14 +73,12 @@ export default function Home() {
   const [impulses, setImpulses] = useState<ImpulseZone[]>([]);
   const [showSavings, setShowSavings] = useState(false);
 
-  // Spend form
   const [inPersonAmount, setInPersonAmount] = useState("5.00");
   const [onlineAmount, setOnlineAmount] = useState("25.00");
   const [inPersonImpulse, setInPersonImpulse] = useState<number | "">("");
   const [onlineImpulse, setOnlineImpulse] = useState<number | "">("");
   const [loading, setLoading] = useState<"in-person" | "online" | null>(null);
 
-  // Fetch theme + check if already logged in on load
   useEffect(() => {
     async function init() {
       const [themeRes, authRes] = await Promise.all([
@@ -68,7 +87,6 @@ export default function Home() {
       ]);
       const themeData = await themeRes.json();
       setTheme(themeData);
-
       const authData = await authRes.json();
       if (authData.loggedIn) {
         setLoggedIn(true);
@@ -79,21 +97,13 @@ export default function Home() {
     init();
   }, []);
 
-  // Fetch impulses + poll server state when logged in
   useEffect(() => {
     if (!loggedIn) return;
-
-    // Fetch impulse zones from main app
     async function fetchImpulses() {
       const res = await fetch("/api/impulses");
-      if (res.ok) {
-        const data = await res.json();
-        setImpulses(data);
-      }
+      if (res.ok) setImpulses(await res.json());
     }
     fetchImpulses();
-
-    // Poll balance/transactions
     async function sync() {
       const res = await fetch("/api/pot");
       const data = await res.json();
@@ -111,20 +121,15 @@ export default function Home() {
     e.preventDefault();
     setLoginLoading(true);
     setLoginError("");
-
     const res = await fetch("/api/login", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ username, password }),
     });
     const data = await res.json();
-
     setLoginLoading(false);
-    if (data.success) {
-      setLoggedIn(true);
-    } else {
-      setLoginError(data.error || "Login failed");
-    }
+    if (data.success) setLoggedIn(true);
+    else setLoginError(data.error || "Login failed");
   }
 
   async function handleLogout() {
@@ -139,24 +144,15 @@ export default function Home() {
   async function handleSpend(type: "in-person" | "online") {
     const amount = parseFloat(type === "in-person" ? inPersonAmount : onlineAmount);
     if (isNaN(amount) || amount <= 0 || amount > balance) return;
-
     const impulseId = type === "in-person" ? inPersonImpulse : onlineImpulse;
     const impulseName = impulses.find((i) => i.id === impulseId)?.name || "Purchase";
-
     setLoading(type);
-
     const res = await fetch("/api/spend", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        type,
-        amount,
-        merchant: impulseName,
-        impulseZoneId: impulseId || null,
-      }),
+      body: JSON.stringify({ type, amount, merchant: impulseName, impulseZoneId: impulseId || null }),
     });
     const data = await res.json();
-
     setLoading(null);
     if (data.success) {
       setBalance(data.balance);
@@ -164,73 +160,93 @@ export default function Home() {
     }
   }
 
-  // Loading check
+  const themeClass = theme?.isDark === false ? "theme-light" : "theme-dark";
+  const primary = theme?.primaryColor || "#0666eb";
+
+  const balanceWhole = Math.floor(balance).toLocaleString();
+  const balancePence = (balance % 1).toFixed(2).slice(1);
+
+  // Set CSS variable for focus rings
+  const cssVars = { "--primary": primary } as React.CSSProperties;
+
   if (checkingAuth) {
     return (
-      <div className="container">
-        <h1>{theme?.name || "Bank"}</h1>
+      <div className={themeClass} style={cssVars}>
+        <div className="login-screen">
+          <div className="login-logo">{theme?.name || "Bank"}</div>
+        </div>
       </div>
     );
   }
 
-  // Login screen
   if (!loggedIn) {
     return (
-      <div className="container">
-        <h1>{theme?.name || "Bank"}</h1>
-        <p className="login-subtitle">Sign in with your account</p>
-        <form className="login-form" onSubmit={handleLogin}>
-          <input
-            type="text"
-            placeholder="Username"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            autoComplete="username"
-          />
-          <input
-            type="password"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            autoComplete="current-password"
-          />
-          {loginError && <p className="login-error">{loginError}</p>}
-          <button className="btn-spend" type="submit" disabled={loginLoading} style={{ background: theme?.primaryColor }}>
-            {loginLoading ? "Signing in..." : "Sign In"}
-          </button>
-        </form>
+      <div className={themeClass} style={cssVars}>
+        <div className="login-screen">
+          <div className="login-logo">{theme?.name || "Bank"}</div>
+          <p className="login-subtitle">Sign in to your account</p>
+          <form className="login-form" onSubmit={handleLogin}>
+            <input
+              type="text"
+              placeholder="Username"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              autoComplete="username"
+            />
+            <input
+              type="password"
+              placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              autoComplete="current-password"
+            />
+            {loginError && <p className="login-error">{loginError}</p>}
+            <button
+              className="btn-spend"
+              type="submit"
+              disabled={loginLoading}
+              style={{ background: primary, marginTop: "0.5rem" }}
+            >
+              {loginLoading ? "Signing in..." : "Sign In"}
+            </button>
+          </form>
+        </div>
       </div>
     );
   }
 
-  // Main bank UI
   return (
-    <div className="container">
-      <div className="header">
+    <div className={themeClass} style={cssVars}>
+      <div className="app-header">
         <h1>{theme?.name || "Bank"}</h1>
-        <button className="btn-logout" onClick={handleLogout}>
-          Sign Out
-        </button>
+        <button className="btn-action" onClick={handleLogout}>Sign Out</button>
       </div>
 
-      <p className="welcome">Welcome, {username}</p>
-
-      <div className="accounts">
-        <div className="account">
-          <span className="account-label">Current Account</span>
-          <span className="account-amount">£{balance.toFixed(2)}</span>
+      <div className="balance-hero">
+        <div className="balance-label">Total Balance</div>
+        <div className="balance-amount">
+          <span className="currency">£</span>{balanceWhole}{balancePence}
         </div>
-        <div className="account savings" onClick={() => setShowSavings(!showSavings)} style={{ cursor: "pointer" }}>
-          <span className="account-label">Savings Account</span>
-          <span className="account-amount savings-amount">£{pot.toFixed(2)}</span>
+      </div>
+
+      <div className="accounts-row">
+        <div className="account-card">
+          <span className="card-label">Current</span>
+          <span className="card-amount">£{balance.toFixed(2)}</span>
+          <span className="card-sub">Main account</span>
+        </div>
+        <div className="account-card savings" onClick={() => setShowSavings(!showSavings)}>
+          <span className="card-label">Savings</span>
+          <span className="card-amount savings-color">£{pot.toFixed(2)}</span>
+          <span className="card-sub">Impulse tax pot</span>
         </div>
       </div>
 
       {showSavings && (
-        <div className="transactions savings-statements">
-          <div className="savings-header">
+        <div className="savings-panel">
+          <div className="savings-panel-header">
             <h2>Savings Statements</h2>
-            <button className="btn-logout" onClick={() => setShowSavings(false)}>Close</button>
+            <button className="btn-action" onClick={() => setShowSavings(false)}>Close</button>
           </div>
           {potTransactions.length === 0 ? (
             <p className="empty-state">No savings yet. Tax from impulse spending will appear here.</p>
@@ -238,12 +254,15 @@ export default function Home() {
             <ul>
               {potTransactions.map((t) => (
                 <li key={t.id}>
-                  <div className="tx-row">
-                    <div className="tx-left">
-                      <span className="tx-merchant">Tax on {t.merchant}</span>
-                      <span className="tx-category">{new Date(t.timestamp).toLocaleDateString()}</span>
+                  <div className="tx-item">
+                    <div className="tx-icon" style={{ background: merchantColor(t.merchant) }}>
+                      {merchantInitial(t.merchant)}
                     </div>
-                    <span className="tx-amount savings-amount">+£{t.amount.toFixed(2)}</span>
+                    <div className="tx-details">
+                      <div className="tx-merchant">Tax on {t.merchant}</div>
+                      <div className="tx-meta">{formatTime(t.timestamp)}</div>
+                    </div>
+                    <span className="tx-amount savings-color">+£{t.amount.toFixed(2)}</span>
                   </div>
                 </li>
               ))}
@@ -255,27 +274,29 @@ export default function Home() {
       <div className="spend-section">
         <div className="spend-card">
           <label>In-Person Purchase</label>
-          <select
-            value={inPersonImpulse}
-            onChange={(e) => setInPersonImpulse(e.target.value ? Number(e.target.value) : "")}
-          >
-            <option value="">Select category</option>
-            {impulses.map((imp) => (
-              <option key={imp.id} value={imp.id}>{imp.name}</option>
-            ))}
-          </select>
-          <input
-            type="number"
-            min="0.01"
-            step="0.01"
-            value={inPersonAmount}
-            onChange={(e) => setInPersonAmount(e.target.value)}
-          />
+          <div className="spend-inputs">
+            <select
+              value={inPersonImpulse}
+              onChange={(e) => setInPersonImpulse(e.target.value ? Number(e.target.value) : "")}
+            >
+              <option value="">Category</option>
+              {impulses.map((imp) => (
+                <option key={imp.id} value={imp.id}>{imp.name}</option>
+              ))}
+            </select>
+            <input
+              type="number"
+              min="0.01"
+              step="0.01"
+              value={inPersonAmount}
+              onChange={(e) => setInPersonAmount(e.target.value)}
+            />
+          </div>
           <button
             className="btn-spend"
             onClick={() => handleSpend("in-person")}
             disabled={loading !== null}
-            style={{ background: theme?.primaryColor }}
+            style={{ background: primary }}
           >
             {loading === "in-person" ? "Processing..." : "Tap to Pay"}
           </button>
@@ -283,27 +304,29 @@ export default function Home() {
 
         <div className="spend-card">
           <label>Online Purchase</label>
-          <select
-            value={onlineImpulse}
-            onChange={(e) => setOnlineImpulse(e.target.value ? Number(e.target.value) : "")}
-          >
-            <option value="">Select category</option>
-            {impulses.map((imp) => (
-              <option key={imp.id} value={imp.id}>{imp.name}</option>
-            ))}
-          </select>
-          <input
-            type="number"
-            min="0.01"
-            step="0.01"
-            value={onlineAmount}
-            onChange={(e) => setOnlineAmount(e.target.value)}
-          />
+          <div className="spend-inputs">
+            <select
+              value={onlineImpulse}
+              onChange={(e) => setOnlineImpulse(e.target.value ? Number(e.target.value) : "")}
+            >
+              <option value="">Category</option>
+              {impulses.map((imp) => (
+                <option key={imp.id} value={imp.id}>{imp.name}</option>
+              ))}
+            </select>
+            <input
+              type="number"
+              min="0.01"
+              step="0.01"
+              value={onlineAmount}
+              onChange={(e) => setOnlineAmount(e.target.value)}
+            />
+          </div>
           <button
             className="btn-spend"
             onClick={() => handleSpend("online")}
             disabled={loading !== null}
-            style={{ background: theme?.primaryColor }}
+            style={{ background: primary }}
           >
             {loading === "online" ? "Processing..." : "Buy Online"}
           </button>
@@ -311,18 +334,19 @@ export default function Home() {
       </div>
 
       {transactions.length > 0 && (
-        <div className="transactions">
-          <h2>Transactions</h2>
-          <ul>
+        <div className="tx-section">
+          <div className="tx-section-title">Recent Transactions</div>
+          <ul className="tx-list">
             {transactions.map((t) => (
-              <li key={t.id}>
-                <div className="tx-row">
-                  <div className="tx-left">
-                    <span className="tx-merchant">{t.merchant}</span>
-                    <span className="tx-category">{t.type}</span>
-                  </div>
-                  <span className="tx-amount">-£{t.amount.toFixed(2)}</span>
+              <li key={t.id} className="tx-item">
+                <div className="tx-icon" style={{ background: merchantColor(t.merchant) }}>
+                  {merchantInitial(t.merchant)}
                 </div>
+                <div className="tx-details">
+                  <div className="tx-merchant">{t.merchant}</div>
+                  <div className="tx-meta">{t.type === "in-person" ? "In-store" : "Online"} · {formatTime(t.timestamp)}</div>
+                </div>
+                <span className="tx-amount">-£{t.amount.toFixed(2)}</span>
               </li>
             ))}
           </ul>

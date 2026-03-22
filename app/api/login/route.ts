@@ -59,28 +59,19 @@ export async function POST(req: NextRequest) {
 
     if (accountsRes.ok) {
       const accounts = await accountsRes.json();
-      const currentAccount = accounts.find((a: { type: string }) => a.type === "CURRENT");
+      const provider = getTheme().provider;
+      // Find the account matching this bank's provider
+      const currentAccount = accounts.find(
+        (a: { type: string; provider: string }) => a.type === "CURRENT" && a.provider === provider
+      );
       if (currentAccount) {
         setUserState(username, {
           accountNumber: currentAccount.account_number,
           sortCode: currentAccount.sort_code,
         });
-        console.log("Bank account found:", currentAccount.account_number);
+        console.log("Bank account found for", provider, ":", currentAccount.account_number);
       } else {
-        console.log("No CURRENT account found, creating one...");
-        const createRes = await fetch(`${MAIN_APP_URL}/api/bank/accounts/create`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json", ...authHeader },
-          body: JSON.stringify({ provider: getTheme().provider }),
-        });
-        if (createRes.ok) {
-          const created = await createRes.json();
-          setUserState(username, {
-            accountNumber: created.current.account_number,
-            sortCode: created.current.sort_code,
-          });
-          console.log("Bank accounts created:", created.current.account_number);
-        }
+        console.log("No account found for provider:", provider, "- user needs to onboard in the main app first");
       }
     }
 

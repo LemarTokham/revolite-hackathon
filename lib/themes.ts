@@ -5,6 +5,17 @@ export interface BankTheme {
   primaryColor: string;
   accentColor: string;
   savingsColor: string;
+  // Design tokens
+  bgColor: string;
+  surfaceColor: string;
+  cardColor: string;
+  textColor: string;
+  textSecondary: string;
+  textMuted: string;
+  borderColor: string;
+  inputBg: string;
+  inputBorder: string;
+  isDark: boolean;
 }
 
 const themes: Record<string, BankTheme> = {
@@ -15,6 +26,16 @@ const themes: Record<string, BankTheme> = {
     primaryColor: "#0666eb",
     accentColor: "#0555cc",
     savingsColor: "#22c55e",
+    bgColor: "#000000",
+    surfaceColor: "#0e0e0e",
+    cardColor: "#161616",
+    textColor: "#ffffff",
+    textSecondary: "#8b8b8b",
+    textMuted: "#555555",
+    borderColor: "#222222",
+    inputBg: "#111111",
+    inputBorder: "#2a2a2a",
+    isDark: true,
   },
   "hay-chsbc": {
     id: "hay-chsbc",
@@ -22,7 +43,17 @@ const themes: Record<string, BankTheme> = {
     provider: "HAY-CHSBC",
     primaryColor: "#db0011",
     accentColor: "#b3000e",
-    savingsColor: "#22c55e",
+    savingsColor: "#16a34a",
+    bgColor: "#f2f2f2",
+    surfaceColor: "#ffffff",
+    cardColor: "#ffffff",
+    textColor: "#1a1a1a",
+    textSecondary: "#666666",
+    textMuted: "#999999",
+    borderColor: "#e5e5e5",
+    inputBg: "#ffffff",
+    inputBorder: "#d1d5db",
+    isDark: false,
   },
   "mane-zo": {
     id: "mane-zo",
@@ -31,6 +62,16 @@ const themes: Record<string, BankTheme> = {
     primaryColor: "#14b8a6",
     accentColor: "#0d9488",
     savingsColor: "#22c55e",
+    bgColor: "#000000",
+    surfaceColor: "#0e0e0e",
+    cardColor: "#161616",
+    textColor: "#ffffff",
+    textSecondary: "#8b8b8b",
+    textMuted: "#555555",
+    borderColor: "#222222",
+    inputBg: "#111111",
+    inputBorder: "#2a2a2a",
+    isDark: true,
   },
   "buck-lays": {
     id: "buck-lays",
@@ -39,6 +80,16 @@ const themes: Record<string, BankTheme> = {
     primaryColor: "#00aeef",
     accentColor: "#0095cc",
     savingsColor: "#22c55e",
+    bgColor: "#000000",
+    surfaceColor: "#0e0e0e",
+    cardColor: "#161616",
+    textColor: "#ffffff",
+    textSecondary: "#8b8b8b",
+    textMuted: "#555555",
+    borderColor: "#222222",
+    inputBg: "#111111",
+    inputBorder: "#2a2a2a",
+    isDark: true,
   },
 };
 

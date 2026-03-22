@@ -5,245 +5,739 @@
 }
 
 body {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  background: #0d0d0d;
-  color: #ffffff;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif;
   min-height: 100vh;
   display: flex;
   justify-content: center;
+  -webkit-font-smoothing: antialiased;
+  background: #000;
 }
 
-.container {
-  padding: 3rem 1.5rem;
+/* =============================================
+   REVOLUT-STYLE (theme-dark)
+   ============================================= */
+
+.theme-dark {
   width: 100%;
-  max-width: 400px;
+  max-width: 420px;
+  min-height: 100vh;
+  background: #0a0a0a;
+  color: #fff;
 }
 
-h1 {
-  font-size: 1.5rem;
-  font-weight: 700;
-  letter-spacing: -0.5px;
-}
-
-.header {
+/* -- Login -- */
+.theme-dark .login-screen {
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
   align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 2rem 1.5rem;
+  background: #0a0a0a;
+}
+
+.theme-dark .login-logo {
+  font-size: 2rem;
+  font-weight: 800;
+  letter-spacing: -1px;
   margin-bottom: 0.5rem;
+  color: #fff;
 }
 
-.welcome {
-  font-size: 0.85rem;
+.theme-dark .login-subtitle {
+  font-size: 0.9rem;
   color: #666;
-  margin-bottom: 1rem;
+  margin-bottom: 2rem;
 }
 
-.btn-logout {
-  background: none;
-  border: 1px solid #333;
-  color: #666;
-  padding: 0.4rem 0.75rem;
-  border-radius: 8px;
-  font-size: 0.75rem;
-  cursor: pointer;
-}
-
-.login-subtitle {
-  font-size: 0.85rem;
-  color: #666;
-  margin-bottom: 1.5rem;
-}
-
-.login-form {
+.theme-dark .login-form {
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
+  width: 100%;
+  max-width: 320px;
 }
 
-.login-form input {
+.theme-dark .login-form input {
   width: 100%;
-  padding: 0.75rem;
-  border: 1px solid #2a2a2a;
-  border-radius: 8px;
-  font-size: 0.95rem;
+  padding: 0.9rem 1rem;
+  border: none;
+  border-radius: 12px;
+  font-size: 1rem;
   background: #1a1a1a;
   color: #fff;
   outline: none;
 }
 
-.login-form input:focus {
-  border-color: #444;
+.theme-dark .login-form input::placeholder {
+  color: #555;
 }
 
-.login-error {
+.theme-dark .login-form input:focus {
+  box-shadow: 0 0 0 2px var(--primary);
+}
+
+.theme-dark .login-error {
   color: #ef4444;
   font-size: 0.8rem;
+  text-align: center;
 }
 
-.accounts {
+/* -- Header -- */
+.theme-dark .app-header {
   display: flex;
-  gap: 0.75rem;
-  margin-bottom: 2rem;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.25rem 0.5rem;
 }
 
-.account {
-  flex: 1;
+.theme-dark .app-header h1 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #fff;
+}
+
+.theme-dark .btn-action {
   background: #1a1a1a;
-  border-radius: 12px;
+  border: none;
+  color: #aaa;
+  padding: 0.4rem 0.85rem;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  cursor: pointer;
+}
+
+.theme-dark .btn-action:hover {
+  background: #222;
+  color: #fff;
+}
+
+/* -- Balance -- */
+.theme-dark .balance-hero {
+  text-align: center;
+  padding: 2.5rem 1.25rem 2rem;
+}
+
+.theme-dark .balance-label {
+  font-size: 0.75rem;
+  color: #666;
+  margin-bottom: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.theme-dark .balance-amount {
+  font-size: 3rem;
+  font-weight: 300;
+  letter-spacing: -1px;
+  color: #fff;
+}
+
+.theme-dark .balance-amount .currency {
+  font-weight: 300;
+}
+
+/* -- Account Cards -- */
+.theme-dark .accounts-row {
+  display: flex;
+  gap: 0.6rem;
+  padding: 0 1.25rem;
+  margin-bottom: 1.5rem;
+}
+
+.theme-dark .account-card {
+  flex: 1;
+  background: #151515;
+  border-radius: 16px;
   padding: 1rem;
   display: flex;
   flex-direction: column;
   gap: 0.3rem;
+  border: none;
 }
 
-.account-label {
-  font-size: 0.7rem;
+.theme-dark .account-card.savings {
+  cursor: pointer;
+}
+
+.theme-dark .account-card.savings:hover {
+  background: #1a1a1a;
+}
+
+.theme-dark .card-label {
+  font-size: 0.65rem;
   color: #666;
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
 
-.account-amount {
-  font-size: 1.4rem;
-  font-weight: 700;
-  letter-spacing: -0.5px;
+.theme-dark .card-amount {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: #fff;
 }
 
-.savings-amount {
+.theme-dark .card-sub {
+  font-size: 0.65rem;
+  color: #444;
+}
+
+.theme-dark .savings-color {
   color: #22c55e;
 }
 
-.spend-section {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
+/* -- Savings Panel -- */
+.theme-dark .savings-panel {
+  margin: 0 1.25rem 1.25rem;
+  background: #151515;
+  border-radius: 16px;
+  overflow: hidden;
 }
 
-.spend-card {
-  background: #1a1a1a;
-  border-radius: 12px;
-  padding: 1.25rem;
+.theme-dark .savings-panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1rem 0.5rem;
+}
+
+.theme-dark .savings-panel-header h2 {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #fff;
+}
+
+.theme-dark .savings-panel ul {
+  list-style: none;
+}
+
+.theme-dark .savings-panel li {
+  border-top: 1px solid #1f1f1f;
+}
+
+.theme-dark .empty-state {
+  padding: 1.25rem 1rem;
+  font-size: 0.8rem;
+  color: #555;
+  text-align: center;
+}
+
+/* -- Spend Cards -- */
+.theme-dark .spend-section {
+  padding: 0 1.25rem;
   display: flex;
   flex-direction: column;
   gap: 0.6rem;
+  margin-bottom: 1.5rem;
 }
 
-.spend-card label {
-  font-weight: 500;
-  font-size: 0.75rem;
-  color: #666;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
+.theme-dark .spend-card {
+  background: #151515;
+  border-radius: 16px;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  border: none;
 }
 
-.spend-card select,
-.spend-card input {
-  width: 100%;
-  padding: 0.6rem 0.75rem;
-  border: 1px solid #2a2a2a;
-  border-radius: 8px;
-  font-size: 0.95rem;
-  background: #111;
+.theme-dark .spend-card label {
+  font-weight: 600;
+  font-size: 0.8rem;
+  color: #fff;
+}
+
+.theme-dark .spend-inputs {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.theme-dark .spend-card select,
+.theme-dark .spend-card input[type="number"] {
+  flex: 1;
+  padding: 0.65rem 0.75rem;
+  border: none;
+  border-radius: 10px;
+  font-size: 0.85rem;
+  background: #0e0e0e;
   color: #fff;
   outline: none;
   -webkit-appearance: none;
 }
 
-.spend-card select:focus,
-.spend-card input:focus {
-  border-color: #444;
+.theme-dark .spend-card select:focus,
+.theme-dark .spend-card input[type="number"]:focus {
+  box-shadow: 0 0 0 2px var(--primary);
 }
 
-.btn-spend {
+.theme-dark .spend-card select option {
+  background: #151515;
+  color: #fff;
+}
+
+.theme-dark .btn-spend {
+  width: 100%;
+  padding: 0.75rem;
+  border: none;
+  border-radius: 25px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  color: white;
+  transition: opacity 0.15s, transform 0.1s;
+}
+
+.theme-dark .btn-spend:hover:not(:disabled) {
+  opacity: 0.85;
+}
+
+.theme-dark .btn-spend:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+.theme-dark .btn-spend:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+/* -- Transactions -- */
+.theme-dark .tx-section {
+  padding: 0 1.25rem 2rem;
+}
+
+.theme-dark .tx-section-title {
+  font-size: 0.7rem;
+  color: #555;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  margin-bottom: 0.5rem;
+  padding-left: 0.25rem;
+}
+
+.theme-dark .tx-list {
+  list-style: none;
+  background: #151515;
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.theme-dark .tx-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.85rem 1rem;
+}
+
+.theme-dark .tx-item + .tx-item {
+  border-top: 1px solid #1f1f1f;
+}
+
+.theme-dark .tx-icon {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  font-weight: 700;
+  flex-shrink: 0;
+  color: white;
+}
+
+.theme-dark .tx-details {
+  flex: 1;
+  min-width: 0;
+}
+
+.theme-dark .tx-merchant {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #fff;
+}
+
+.theme-dark .tx-meta {
+  font-size: 0.7rem;
+  color: #555;
+  margin-top: 0.15rem;
+}
+
+.theme-dark .tx-amount {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #fff;
+  flex-shrink: 0;
+}
+
+
+/* =============================================
+   HSBC-STYLE (theme-light)
+   ============================================= */
+
+.theme-light {
+  width: 100%;
+  max-width: 420px;
+  min-height: 100vh;
+  background: #f5f5f5;
+  color: #1a1a1a;
+}
+
+/* -- Login -- */
+.theme-light .login-screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 2rem 1.5rem;
+  background: #fff;
+}
+
+.theme-light .login-logo {
+  font-size: 2rem;
+  font-weight: 800;
+  letter-spacing: -1px;
+  margin-bottom: 0.5rem;
+  color: #db0011;
+}
+
+.theme-light .login-subtitle {
+  font-size: 0.9rem;
+  color: #666;
+  margin-bottom: 2rem;
+}
+
+.theme-light .login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  width: 100%;
+  max-width: 320px;
+}
+
+.theme-light .login-form input {
+  width: 100%;
+  padding: 0.9rem 1rem;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 1rem;
+  background: #fff;
+  color: #1a1a1a;
+  outline: none;
+}
+
+.theme-light .login-form input::placeholder {
+  color: #9ca3af;
+}
+
+.theme-light .login-form input:focus {
+  border-color: #db0011;
+}
+
+.theme-light .login-error {
+  color: #ef4444;
+  font-size: 0.8rem;
+  text-align: center;
+}
+
+/* -- Header (red bar) -- */
+.theme-light .app-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.25rem;
+  background: #db0011;
+}
+
+.theme-light .app-header h1 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #fff;
+}
+
+.theme-light .btn-action {
+  background: rgba(255,255,255,0.15);
+  border: none;
+  color: rgba(255,255,255,0.9);
+  padding: 0.4rem 0.85rem;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  cursor: pointer;
+}
+
+.theme-light .btn-action:hover {
+  background: rgba(255,255,255,0.25);
+  color: #fff;
+}
+
+/* -- Balance (white card under red header) -- */
+.theme-light .balance-hero {
+  background: #fff;
+  text-align: left;
+  padding: 1.5rem 1.25rem;
+  border-bottom: 1px solid #e5e5e5;
+}
+
+.theme-light .balance-label {
+  font-size: 0.75rem;
+  color: #666;
+  margin-bottom: 0.5rem;
+}
+
+.theme-light .balance-amount {
+  font-size: 2.5rem;
+  font-weight: 700;
+  letter-spacing: -1px;
+  color: #1a1a1a;
+}
+
+.theme-light .balance-amount .currency {
+  font-weight: 700;
+}
+
+/* -- Account Cards -- */
+.theme-light .accounts-row {
+  display: flex;
+  gap: 0.6rem;
+  padding: 1rem 1.25rem;
+  margin-bottom: 0.5rem;
+}
+
+.theme-light .account-card {
+  flex: 1;
+  background: #fff;
+  border-radius: 12px;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  border: none;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+}
+
+.theme-light .account-card.savings {
+  cursor: pointer;
+}
+
+.theme-light .account-card.savings:hover {
+  box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+}
+
+.theme-light .card-label {
+  font-size: 0.65rem;
+  color: #666;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.theme-light .card-amount {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #1a1a1a;
+}
+
+.theme-light .card-sub {
+  font-size: 0.65rem;
+  color: #999;
+}
+
+.theme-light .savings-color {
+  color: #16a34a;
+}
+
+/* -- Savings Panel -- */
+.theme-light .savings-panel {
+  margin: 0 1.25rem 1rem;
+  background: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+}
+
+.theme-light .savings-panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1rem 0.5rem;
+}
+
+.theme-light .savings-panel-header h2 {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #1a1a1a;
+}
+
+.theme-light .savings-panel ul {
+  list-style: none;
+}
+
+.theme-light .savings-panel li {
+  border-top: 1px solid #f0f0f0;
+}
+
+.theme-light .empty-state {
+  padding: 1.25rem 1rem;
+  font-size: 0.8rem;
+  color: #999;
+  text-align: center;
+}
+
+/* -- Spend Cards -- */
+.theme-light .spend-section {
+  padding: 0 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  margin-bottom: 1rem;
+}
+
+.theme-light .spend-card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  border: none;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+}
+
+.theme-light .spend-card label {
+  font-weight: 600;
+  font-size: 0.8rem;
+  color: #1a1a1a;
+}
+
+.theme-light .spend-inputs {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.theme-light .spend-card select,
+.theme-light .spend-card input[type="number"] {
+  flex: 1;
+  padding: 0.65rem 0.75rem;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  background: #fff;
+  color: #1a1a1a;
+  outline: none;
+  -webkit-appearance: none;
+}
+
+.theme-light .spend-card select:focus,
+.theme-light .spend-card input[type="number"]:focus {
+  border-color: #db0011;
+}
+
+.theme-light .spend-card select option {
+  background: #fff;
+  color: #1a1a1a;
+}
+
+.theme-light .btn-spend {
   width: 100%;
   padding: 0.75rem;
   border: none;
   border-radius: 8px;
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   font-weight: 600;
   cursor: pointer;
-  background: #0666eb;
   color: white;
-  transition: opacity 0.2s;
+  transition: opacity 0.15s, transform 0.1s;
 }
 
-.btn-spend:disabled {
+.theme-light .btn-spend:hover:not(:disabled) {
+  opacity: 0.9;
+}
+
+.theme-light .btn-spend:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+.theme-light .btn-spend:disabled {
   opacity: 0.4;
   cursor: not-allowed;
 }
 
-.transactions {
-  margin-top: 2rem;
+/* -- Transactions -- */
+.theme-light .tx-section {
+  padding: 0 1.25rem 2rem;
 }
 
-.transactions h2 {
-  font-size: 0.75rem;
+.theme-light .tx-section-title {
+  font-size: 0.7rem;
   color: #666;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
-  margin-bottom: 0.75rem;
+  letter-spacing: 0.8px;
+  margin-bottom: 0.5rem;
+  padding-left: 0.25rem;
 }
 
-.transactions ul {
+.theme-light .tx-list {
   list-style: none;
-}
-
-.transactions li {
-  padding: 0.75rem 0;
-  border-bottom: 1px solid #1a1a1a;
-}
-
-.transactions li:last-child {
-  border-bottom: none;
-}
-
-.tx-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.tx-left {
-  display: flex;
-  flex-direction: column;
-  gap: 0.15rem;
-}
-
-.tx-merchant {
-  font-size: 0.95rem;
-  font-weight: 500;
-}
-
-.tx-category {
-  font-size: 0.75rem;
-  color: #666;
-}
-
-.tx-amount {
-  font-size: 0.95rem;
-  font-weight: 600;
-  color: #fff;
-}
-
-.savings-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 0.75rem;
-}
-
-.savings-header h2 {
-  margin-bottom: 0;
-}
-
-.savings-statements {
-  background: #1a1a1a;
+  background: #fff;
   border-radius: 12px;
-  padding: 1.25rem;
-  margin-bottom: 2rem;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.08);
 }
 
-.empty-state {
+.theme-light .tx-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.85rem 1rem;
+}
+
+.theme-light .tx-item + .tx-item {
+  border-top: 1px solid #f0f0f0;
+}
+
+.theme-light .tx-icon {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   font-size: 0.8rem;
+  font-weight: 700;
+  flex-shrink: 0;
+  color: white;
+}
+
+.theme-light .tx-details {
+  flex: 1;
+  min-width: 0;
+}
+
+.theme-light .tx-merchant {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #1a1a1a;
+}
+
+.theme-light .tx-meta {
+  font-size: 0.7rem;
+  color: #999;
+  margin-top: 0.15rem;
+}
+
+.theme-light .tx-amount {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #1a1a1a;
+  flex-shrink: 0;
+}
+
+/* -- HSBC btn-action used in savings panel too -- */
+.theme-light .savings-panel-header .btn-action {
+  background: #f5f5f5;
   color: #666;
+  border: none;
+  padding: 0.3rem 0.7rem;
+  border-radius: 16px;
+  font-size: 0.7rem;
+  cursor: pointer;
 }
