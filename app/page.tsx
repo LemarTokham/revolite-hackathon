@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 const UNLOCK_DATE = new Date("2027-02-16T00:00:00Z");
 
@@ -95,6 +95,12 @@ export default function Home() {
   const [impulseLimit, setImpulseLimit] = useState(0);
   const [totalSpent, setTotalSpent] = useState(0);
   const [countdown, setCountdown] = useState(getCountdown());
+  const horseAudio = useRef<HTMLAudioElement | null>(null);
+
+  useEffect(() => {
+    horseAudio.current = new Audio("/horse.mp3");
+    horseAudio.current.load();
+  }, []);
 
   useEffect(() => {
     if (!showSavings) return;
@@ -188,9 +194,9 @@ export default function Home() {
       if (data.overLimit) {
         console.log("Over limit! Playing horse sound for type:", type);
         setOverLimit(true);
-        if (type === "in-person") {
-          const audio = new Audio("/horse.mp3");
-          audio.play().catch((err) => console.log("Audio play failed:", err));
+        if (type === "in-person" && horseAudio.current) {
+          horseAudio.current.currentTime = 0;
+          horseAudio.current.play().catch((err) => console.log("Audio play failed:", err));
         }
       }
     }
