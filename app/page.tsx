@@ -259,7 +259,7 @@ export default function Home() {
       </div>
 
       <div className="balance-hero">
-        <div className="balance-label">Welcome, {username}</div>
+        <div className="balance-label">Welcome, {username.split("@")[0]}</div>
         <div className="balance-amount">
           <span className="currency">£</span>{balanceWhole}{balancePence}
         </div>
