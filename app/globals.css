@@ -21,9 +21,63 @@ body {
 
 h1 {
   font-size: 1.5rem;
-  margin-bottom: 0.5rem;
   font-weight: 700;
   letter-spacing: -0.5px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.welcome {
+  font-size: 0.85rem;
+  color: #666;
+  margin-bottom: 1rem;
+}
+
+.btn-logout {
+  background: none;
+  border: 1px solid #333;
+  color: #666;
+  padding: 0.4rem 0.75rem;
+  border-radius: 8px;
+  font-size: 0.75rem;
+  cursor: pointer;
+}
+
+.login-subtitle {
+  font-size: 0.85rem;
+  color: #666;
+  margin-bottom: 1.5rem;
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.login-form input {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #2a2a2a;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  background: #1a1a1a;
+  color: #fff;
+  outline: none;
+}
+
+.login-form input:focus {
+  border-color: #444;
+}
+
+.login-error {
+  color: #ef4444;
+  font-size: 0.8rem;
 }
 
 .accounts {
@@ -169,4 +223,27 @@ h1 {
   font-size: 0.95rem;
   font-weight: 600;
   color: #fff;
+}
+
+.savings-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+}
+
+.savings-header h2 {
+  margin-bottom: 0;
+}
+
+.savings-statements {
+  background: #1a1a1a;
+  border-radius: 12px;
+  padding: 1.25rem;
+  margin-bottom: 2rem;
+}
+
+.empty-state {
+  font-size: 0.8rem;
+  color: #666;
 }

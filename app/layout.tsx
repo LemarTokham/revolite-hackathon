@@ -1,9 +1,10 @@
-import type { Metadata } from "next";
 import "./globals.css";
+import { getTheme } from "@/lib/themes";
 
-export const metadata: Metadata = {
-  title: "Revolite",
-};
+export async function generateMetadata() {
+  const theme = getTheme();
+  return { title: theme.name };
+}
 
 export default function RootLayout({
   children,

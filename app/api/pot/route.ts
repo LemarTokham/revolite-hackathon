@@ -1,35 +1,54 @@
 import { NextRequest, NextResponse } from "next/server";
-import state from "@/lib/state";
+import { getCurrentUser, getUserState, setUserState } from "@/lib/state";
 
-
-// Called by ur main app during the taxing process to add money to the pot (taxing done in main app, this just updates the pot)
+// Called by the main app during the taxing process to add money to the pot
 export async function POST(req: NextRequest) {
   const { amount } = await req.json();
+  const username = getCurrentUser();
+  if (!username) {
+    return NextResponse.json({ error: "Not logged in" }, { status: 401 });
+  }
+
+  const user = getUserState(username);
 
   if (typeof amount !== "number" || amount <= 0) {
     return NextResponse.json({ error: "Invalid amount" }, { status: 400 });
   }
-  if (amount > state.balance) {
+  if (amount > user.balance) {
     return NextResponse.json({ error: "Insufficient balance" }, { status: 400 });
   }
 
-  // change baalnce and pot
-  state.balance = Math.round((state.balance - amount) * 100) / 100;
-  state.potBalance = Math.round((state.potBalance + amount) * 100) / 100;
+  const newBalance = Math.round((user.balance - amount) * 100) / 100;
+  const newPot = Math.round((user.potBalance + amount) * 100) / 100;
 
-  // return updated state
+  setUserState(username, {
+    balance: newBalance,
+    potBalance: newPot,
+  });
+
   return NextResponse.json({
     success: true,
-    balance: state.balance,
-    potBalance: state.potBalance,
+    balance: newBalance,
+    potBalance: newPot,
   });
 }
 
-// reuturn current state
+// Return current state for the logged-in user
 export async function GET() {
+  const username = getCurrentUser();
+  if (!username) {
+    return NextResponse.json({
+      balance: 0,
+      potBalance: 0,
+      transactions: [],
+    });
+  }
+
+  const user = getUserState(username);
   return NextResponse.json({
-    balance: state.balance,
-    potBalance: state.potBalance,
-    transactions: state.transactions,
+    balance: user.balance,
+    potBalance: user.potBalance,
+    transactions: user.transactions,
+    potTransactions: user.potTransactions || [],
   });
 }
